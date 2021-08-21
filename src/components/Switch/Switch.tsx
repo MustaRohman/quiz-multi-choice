@@ -8,16 +8,18 @@ interface Props {
 
 const Switch: FC<Props> = ({ value, onChange, children }) => {
   let selectedIndex = 0;
+  let totalChildren = 0;
   const childrenArray = React.Children.toArray(children);
   childrenArray.forEach((child, index) => {
     const reactChild = child as { props: { value: any } };
     if (React.isValidElement(reactChild) && reactChild.props) {
-      console.log(reactChild.props);
+      totalChildren++;
       if (reactChild.props.value === value) {
         selectedIndex = index;
       }
     }
   });
+  const isVertical = totalChildren === 3;
 
   function clickHandler(value: any) {
     onChange(value);
@@ -34,15 +36,24 @@ const Switch: FC<Props> = ({ value, onChange, children }) => {
       };
       return React.cloneElement(child, {
         ...child.props,
+        isVertical,
         onClick,
       });
     }
   });
 
   return (
-    <Wrapper>
+    <Wrapper
+      selectedIndex={selectedIndex}
+      totalOptions={totalChildren}
+      isVertical={isVertical}
+    >
       {childrenMapped}
-      <SelectedOutline selectedIndex={selectedIndex} />
+      <SelectedOutline
+        selectedIndex={selectedIndex}
+        totalOptions={totalChildren}
+        isVertical={isVertical}
+      />
     </Wrapper>
   );
 };

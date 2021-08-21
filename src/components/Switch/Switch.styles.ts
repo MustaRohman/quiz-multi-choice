@@ -3,41 +3,101 @@ import styled from "styled-components";
 interface OutlineProps {
   readonly toggleValue?: boolean;
   readonly selectedIndex: number;
+  readonly totalOptions: number;
+  readonly isVertical?: boolean;
 }
 
 export interface OptionProps {
   readonly value: boolean;
+  readonly isVertical?: boolean;
 }
 
-export const Wrapper = styled.ul`
-  width: 900px;
-  height: 80px;
+export const Wrapper = styled.ul<OutlineProps>`
+  max-width: 900px;
+  width: 100%;
   border: 2px solid #f9d29f;
   box-sizing: border-box;
-  border-radius: 100px;
+  border-radius: ${(props) => (props.isVertical ? `24` : `100`)}px;
   padding: 0px;
-
+  position: absolute;
   display: flex;
-  //   flex-direction: row;
-  //   justify-content: space-between;
+  flex-direction: ${(props) => (props.totalOptions === 3 ? `column` : `row`)};
+  justify-content: space-between;
+
+  @media only screen and (max-width: 600px) {
+    flex-direction: column;
+    border-radius: 24px;
+  }
 `;
 
 export const Option = styled.option<OptionProps>`
   margin: 0px;
-  width: 450px;
+  max-width: 900px;
+  width: ${(props) => (props.isVertical ? `100` : `50`)}%;
   height: 77px;
-  padding: 18px;
+  padding: 22px;
   box-sizing: border-box;
   cursor: pointer;
   z-index: 100;
   font-weight: bold;
-  //   font-family: Mulish;
   color: white;
   border-radius: 100px;
+  font-size: 24px;
+
+  @media only screen and (max-width: 600px) {
+    height: 48px;
+    padding: 7px;
+    width: 100%;
+  }
+`;
+
+const verticalStyling = (props: OutlineProps) => `
+  transition: top 0.2s, border-top-left-radius 0.2s,
+      border-top-right-radius 0.2s, border-bottom-left-radius 0.2s,
+      border-bottom-right-radius 0.2s;
+  top: 0px;
+  left: 0px;
+  margin: 0 auto;
+  height: ${100 / props.totalOptions}%;
+  width: 100%;  
+  top: ${(100 / props.totalOptions) * props.selectedIndex}%;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+${
+  props.selectedIndex === 0
+    ? `
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  `
+    : ``
+}
+
+${
+  props.selectedIndex === props.totalOptions - 1
+    ? `
+    border-radius: 0px;
+
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    `
+    : ``
+}
+
+
+// Option in the middle?
 `;
 
 export const SelectedOutline = styled.div<OutlineProps>`
-  width: 450px;
+  width: 50%;
   height: 77px;
   border-radius: 100px;
   position: absolute;
@@ -45,5 +105,10 @@ export const SelectedOutline = styled.div<OutlineProps>`
   z-index: 50;
 
   transition: margin-left 0.2s;
-  margin-left: ${(props) => props.selectedIndex * 448}px;
+  margin-left: ${(props) => (props.selectedIndex / props.totalOptions) * 100}%;
+  @media only screen and (max-width: 600px) {
+    ${(props) => verticalStyling(props)}
+  }
+
+  ${(props) => (props.totalOptions === 3 ? verticalStyling(props) : ``)};
 `;

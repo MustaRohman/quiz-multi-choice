@@ -6,12 +6,14 @@ function App() {
   const [switchValue, setSwitchValue] = useState("test");
   return (
     <div className="App">
-      <header className="App-header">
         <Switch value={switchValue} onChange={(value) => setSwitchValue(value)}>
-          <Option value={"test"}>Test</Option>
+          <Option value={"test"}>Impermeable  membrane </Option>
           <Option value={"test2"}>Test</Option>
+          {/* <Option value={"test3"}>Test2</Option> */}
         </Switch>
-      </header>
+      <main>
+
+      </main>
     </div>
   );
 }
