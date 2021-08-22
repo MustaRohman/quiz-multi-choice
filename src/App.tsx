@@ -79,9 +79,39 @@ function App() {
       ],
     ],
   };
+  const question2: Question = {
+    title: "Which are the best sports people & teams?",
+    toggles: [
+      [
+        {
+          text: "Liverpool",
+          isCorrect: true,
+        },
+        {
+          text: "Chelsea",
+          isCorrect: false,
+        },
+        {
+          text: "Man Utd",
+          isCorrect: false,
+        },
+      ],
+      [
+        {
+          text: "Serena Williams",
+          isCorrect: false,
+        },
+        {
+          text: "Naomi Osaka",
+          isCorrect: true,
+        },
+      ],
+    ],
+  };
   return (
     <div className="App">
       <MultiChoice question={question1} theme={theme} />
+      <MultiChoice question={question2} theme={theme} />
     </div>
   );
 }

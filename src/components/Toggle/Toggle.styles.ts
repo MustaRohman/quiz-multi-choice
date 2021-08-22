@@ -42,19 +42,22 @@ export const Option = styled.div<OptionProps>`
   max-width: 900px;
   width: ${(props) => (props.isVertical ? `100` : `50`)}%;
   height: 77px;
-  padding: 22px;
   box-sizing: border-box;
   cursor: pointer;
   z-index: 100;
   font-weight: bold;
+  line-height: 77px;
+  text-align: center;
   color: ${(props) => (props.fontColor ? props.fontColor : "white")};
   border-radius: 100px;
   font-size: 24px;
 
   @media only screen and (max-width: 600px) {
     height: 48px;
-    padding: 7px;
+    line-height: 48px;
+    padding: 0px;
     width: 100%;
+    font-size: 18px;
   }
 `;
 
