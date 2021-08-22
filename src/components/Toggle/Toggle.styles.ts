@@ -8,18 +8,19 @@ interface OutlineProps {
 }
 
 export interface OptionProps {
-  readonly value: boolean;
+  readonly value: any;
   readonly isVertical?: boolean;
 }
 
-export const Wrapper = styled.ul<OutlineProps>`
+export const Wrapper = styled.div<OutlineProps>`
+  margin: 10px 0px;
   max-width: 900px;
   width: 100%;
   border: 2px solid #f9d29f;
   box-sizing: border-box;
   border-radius: ${(props) => (props.isVertical ? `24` : `100`)}px;
   padding: 0px;
-  position: absolute;
+  position: relative;
   display: flex;
   flex-direction: ${(props) => (props.totalOptions === 3 ? `column` : `row`)};
   justify-content: space-between;
@@ -30,7 +31,7 @@ export const Wrapper = styled.ul<OutlineProps>`
   }
 `;
 
-export const Option = styled.option<OptionProps>`
+export const Option = styled.div<OptionProps>`
   margin: 0px;
   max-width: 900px;
   width: ${(props) => (props.isVertical ? `100` : `50`)}%;

@@ -1,12 +1,12 @@
 import React, { FC } from "react";
-import { SelectedOutline, Wrapper, Option } from "./Switch.styles";
+import { SelectedOutline, Wrapper, Option } from "./Toggle.styles";
 
 interface Props {
-  value: boolean;
-  onChange: (value: any) => {};
+  value: any;
+  onChange: (value: any) => void;
 }
 
-const Switch: FC<Props> = ({ value, onChange, children }) => {
+const Toggle: FC<Props> = ({ value: toggleValue, onChange, children }) => {
   let selectedIndex = 0;
   let totalChildren = 0;
   const childrenArray = React.Children.toArray(children);
@@ -14,12 +14,12 @@ const Switch: FC<Props> = ({ value, onChange, children }) => {
     const reactChild = child as { props: { value: any } };
     if (React.isValidElement(reactChild) && reactChild.props) {
       totalChildren++;
-      if (reactChild.props.value === value) {
+      if (reactChild.props.value === toggleValue) {
         selectedIndex = index;
       }
     }
   });
-  const isVertical = totalChildren === 3;
+  const isVertical = totalChildren >= 3;
 
   function clickHandler(value: any) {
     onChange(value);
@@ -38,6 +38,8 @@ const Switch: FC<Props> = ({ value, onChange, children }) => {
         ...child.props,
         isVertical,
         onClick,
+        "aria-selected": value === toggleValue,
+        role: "option",
       });
     }
   });
@@ -47,6 +49,7 @@ const Switch: FC<Props> = ({ value, onChange, children }) => {
       selectedIndex={selectedIndex}
       totalOptions={totalChildren}
       isVertical={isVertical}
+      role="listbox"
     >
       {childrenMapped}
       <SelectedOutline
@@ -58,4 +61,4 @@ const Switch: FC<Props> = ({ value, onChange, children }) => {
   );
 };
 
-export default Switch;
+export default Toggle;
