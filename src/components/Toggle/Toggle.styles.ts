@@ -1,22 +1,25 @@
 import styled from "styled-components";
 
 interface OutlineProps {
-  readonly toggleValue?: boolean;
-  readonly selectedIndex: number;
-  readonly totalOptions: number;
-  readonly isVertical?: boolean;
+  toggleValue?: boolean;
+  selectedIndex: number;
+  totalOptions: number;
+  isVertical?: boolean;
+  backgroundColor?: string;
+  fontColor?: string;
 }
 
 export interface OptionProps {
-  readonly value: any;
-  readonly isVertical?: boolean;
+  value: any;
+  isVertical?: boolean;
+  fontColor?: string;
 }
 
 export const Wrapper = styled.div<OutlineProps>`
-  margin: 10px 0px;
+  margin: 10px auto;
   max-width: 900px;
   width: 100%;
-  border: 2px solid #f9d29f;
+  border: 2px solid #fbfbfb;
   box-sizing: border-box;
   border-radius: ${(props) => (props.isVertical ? `24` : `100`)}px;
   padding: 0px;
@@ -25,6 +28,9 @@ export const Wrapper = styled.div<OutlineProps>`
   flex-direction: ${(props) => (props.totalOptions === 3 ? `column` : `row`)};
   justify-content: space-between;
 
+  :not(:last-child) {
+    margin-bottom: 24px;
+  }
   @media only screen and (max-width: 600px) {
     flex-direction: column;
     border-radius: 24px;
@@ -41,7 +47,7 @@ export const Option = styled.div<OptionProps>`
   cursor: pointer;
   z-index: 100;
   font-weight: bold;
-  color: white;
+  color: ${(props) => (props.fontColor ? props.fontColor : "white")};
   border-radius: 100px;
   font-size: 24px;
 
@@ -92,9 +98,6 @@ ${
     `
     : ``
 }
-
-
-// Option in the middle?
 `;
 
 export const SelectedOutline = styled.div<OutlineProps>`
@@ -102,7 +105,8 @@ export const SelectedOutline = styled.div<OutlineProps>`
   height: 77px;
   border-radius: 100px;
   position: absolute;
-  background: #f8caa3;
+  background: ${(props) =>
+    props.backgroundColor ? props.backgroundColor : `#f8caa3`};
   z-index: 50;
 
   transition: margin-left 0.2s;

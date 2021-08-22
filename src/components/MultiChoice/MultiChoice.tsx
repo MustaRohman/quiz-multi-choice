@@ -1,28 +1,30 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Question from "../../types/Question";
 import { Option, Toggle } from "../Toggle";
 import { Title, Wrapper } from "./MultiChoice.styles";
 
 interface ThemeBase {
   background: string;
-  text: string;
-  highlight: {
+  activeStyle: {
     background: string;
-    text: string;
+    fontColor: string;
   };
 }
 
+export interface Theme {
+  primary: ThemeBase;
+  secondary: ThemeBase;
+  tertiary: ThemeBase;
+  quaternary: ThemeBase;
+}
 interface Props {
   question: Question;
-  theme?: {
-    primary: ThemeBase;
-    secondary: ThemeBase;
-    tertiary: ThemeBase;
-  };
+  theme: Theme;
 }
 
 const MultiChoice: FC<Props> = ({ question, theme }: Props) => {
   const { toggles, title } = question;
+  const [currentTheme, setCurrentTheme] = useState(theme.primary);
   const [allCorrect, setAllCorrect] = useState(false);
   const [selectedAnswers, setSelectedAnswers] = useState<
     { text: string; isCorrect: boolean }[]
@@ -35,16 +37,34 @@ const MultiChoice: FC<Props> = ({ question, theme }: Props) => {
     const updatedAnswers = [...selectedAnswers];
     updatedAnswers[toggleIndex] = value;
     setSelectedAnswers(updatedAnswers);
-    if (updatedAnswers.every((item) => item && item.isCorrect)) {
+  }
+
+  useEffect(() => {
+    const totalCorrect = selectedAnswers.filter((item) => item.isCorrect);
+    if (totalCorrect.length === toggles.length) {
       setAllCorrect(true);
     }
-  }
-  console.log(selectedAnswers);
+    const percCorrect = (totalCorrect.length / toggles.length) * 100;
+    if (percCorrect <= 25) {
+      setCurrentTheme(theme.primary);
+    } else if (percCorrect <= 50) {
+      setCurrentTheme(theme.secondary);
+    } else if (percCorrect <= 75) {
+      setCurrentTheme(theme.tertiary);
+    } else if (percCorrect === 100) {
+      setCurrentTheme(theme.quaternary);
+    }
+  }, [selectedAnswers, toggles, theme]);
   return (
-    <Wrapper>
+    <Wrapper backgroundColor={currentTheme.background}>
       <Title>{title}</Title>
       {toggles.map((t, index) => (
         <Toggle
+          activeStyle={{
+            backgroundColor: currentTheme.activeStyle.background,
+            fontColor: currentTheme.activeStyle.fontColor,
+          }}
+          disabled={allCorrect}
           key={index}
           value={selectedAnswers[index]}
           onChange={(value) => onToggleChange(index, value)}

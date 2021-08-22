@@ -4,9 +4,20 @@ import { SelectedOutline, Wrapper, Option } from "./Toggle.styles";
 interface Props {
   value: any;
   onChange: (value: any) => void;
+  activeStyle?: {
+    backgroundColor: string;
+    fontColor: string;
+  };
+  disabled?: boolean;
 }
 
-const Toggle: FC<Props> = ({ value: toggleValue, onChange, children }) => {
+const Toggle: FC<Props> = ({
+  value: toggleValue,
+  onChange,
+  children,
+  disabled,
+  activeStyle,
+}) => {
   let selectedIndex = 0;
   let totalChildren = 0;
   const childrenArray = React.Children.toArray(children);
@@ -22,6 +33,9 @@ const Toggle: FC<Props> = ({ value: toggleValue, onChange, children }) => {
   const isVertical = totalChildren >= 3;
 
   function clickHandler(value: any) {
+    if (disabled) {
+      return;
+    }
     onChange(value);
   }
 
@@ -31,6 +45,7 @@ const Toggle: FC<Props> = ({ value: toggleValue, onChange, children }) => {
     }
     if (child.type === Option) {
       const { value } = child.props;
+      const isActive = value === toggleValue;
       const onClick = () => {
         clickHandler(value);
       };
@@ -38,7 +53,8 @@ const Toggle: FC<Props> = ({ value: toggleValue, onChange, children }) => {
         ...child.props,
         isVertical,
         onClick,
-        "aria-selected": value === toggleValue,
+        "aria-selected": isActive,
+        fontColor: isActive && activeStyle?.fontColor,
         role: "option",
       });
     }
@@ -53,6 +69,8 @@ const Toggle: FC<Props> = ({ value: toggleValue, onChange, children }) => {
     >
       {childrenMapped}
       <SelectedOutline
+        backgroundColor={activeStyle?.backgroundColor}
+        fontColor={activeStyle?.fontColor}
         selectedIndex={selectedIndex}
         totalOptions={totalChildren}
         isVertical={isVertical}
