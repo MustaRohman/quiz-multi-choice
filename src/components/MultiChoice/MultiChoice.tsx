@@ -76,7 +76,7 @@ const MultiChoice: FC<Props> = ({ question, theme }: Props) => {
           ))}
         </Toggle>
       ))}
-      {allCorrect && <p>CONGRATSSS!!!</p>}
+      {allCorrect && <p>Well done!</p>}
     </Wrapper>
   );
 };

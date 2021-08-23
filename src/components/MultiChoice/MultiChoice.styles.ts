@@ -4,7 +4,7 @@ interface WrapperProps {
   backgroundColor?: string;
 }
 
-export const Wrapper = styled.div<WrapperProps>`
+export const Wrapper = styled.main<WrapperProps>`
   width: 100vw;
   padding: 72px 0px;
   background: ${(props) =>
