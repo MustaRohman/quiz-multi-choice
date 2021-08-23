@@ -10,7 +10,7 @@ interface OutlineProps {
 }
 
 export interface OptionProps {
-  value: any;
+  value: { text: string; isCorrect: boolean };
   isVertical?: boolean;
   fontColor?: string;
 }
@@ -21,20 +21,32 @@ export const Wrapper = styled.div<OutlineProps>`
   width: 100%;
   border: 2px solid #fbfbfb;
   box-sizing: border-box;
-  border-radius: ${(props) => (props.isVertical ? `24` : `100`)}px;
+  border-radius: 100px;
   padding: 0px;
   position: relative;
   display: flex;
-  flex-direction: ${(props) => (props.totalOptions === 3 ? `column` : `row`)};
+  flex-direction: row;
   justify-content: space-between;
 
   :not(:last-child) {
     margin-bottom: 24px;
   }
   @media only screen and (max-width: 600px) {
-    flex-direction: column;
-    border-radius: 24px;
+    width: 288px;
+    ${(props) =>
+      props.isVertical
+        ? `
+        flex-direction: column;
+        border-radius: 24px;
+        `
+        : ``}
   }
+
+  ${(props) =>
+    props.totalOptions === 3
+      ? `flex-direction: column;
+  border-radius: 24px;`
+      : ``}
 `;
 
 export const Option = styled.div<OptionProps>`
@@ -46,18 +58,23 @@ export const Option = styled.div<OptionProps>`
   cursor: pointer;
   z-index: 100;
   font-weight: bold;
-  line-height: 77px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   color: ${(props) => (props.fontColor ? props.fontColor : "white")};
   border-radius: 100px;
   font-size: 24px;
 
   @media only screen and (max-width: 600px) {
-    height: 48px;
+    font-size: 18px;
+    ${(props) =>
+      props.isVertical
+        ? `height: 48px;
     line-height: 48px;
     padding: 0px;
-    width: 100%;
-    font-size: 18px;
+    width: 100%;`
+        : ``}
   }
 `;
 
@@ -115,7 +132,7 @@ export const SelectedOutline = styled.div<OutlineProps>`
   transition: margin-left 0.2s;
   margin-left: ${(props) => (props.selectedIndex / props.totalOptions) * 100}%;
   @media only screen and (max-width: 600px) {
-    ${(props) => verticalStyling(props)}
+    ${(props) => (props.isVertical ? verticalStyling(props) : ``)}
   }
 
   ${(props) => (props.totalOptions === 3 ? verticalStyling(props) : ``)};

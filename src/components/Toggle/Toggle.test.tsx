@@ -4,13 +4,15 @@ import { Toggle, Option } from "./index";
 describe("Toggle", () => {
   it("Toggle value should determine active option", () => {
     //   Arrange
-    let switchValue = "test2";
+    let switchValue = { text: "Test", isCorrect: false };
 
     // Act
     render(
       <Toggle value={switchValue} onChange={() => {}}>
-        <Option value={"test"}>Impermeable</Option>
-        <Option value={"test2"}>Test</Option>
+        <Option value={{ text: "Impermeable", isCorrect: true }}>
+          Impermeable
+        </Option>
+        <Option value={{ text: "Test", isCorrect: false }}>Test</Option>
       </Toggle>
     );
 
